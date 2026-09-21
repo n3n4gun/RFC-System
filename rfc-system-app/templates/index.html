@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFC System — заявки на изменения</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="logo">RFC<span>System</span></div>
+            <nav class="main-nav">
+                <a href="#how-it-works">Как это работает</a>
+                <a href="#features">Возможности</a>
+                <a href="#pool">Пул заявок</a>
+            </nav>
+            <div class="header-actions">
+                <a href="/user/login" class="btn btn-ghost">Войти</a>
+                <a href="#" class="btn btn-primary">Создать заявку</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-inner">
+                <h1>Единое пространство для заявок на изменения</h1>
+                <p class="hero-subtitle">
+                    RFC System помогает сотрудникам компании оформлять запросы на доработку и изменение
+                    сервисов, а команде разработки — прозрачно вести их от идеи до релиза.
+                </p>
+                <div class="hero-actions">
+                    <a href="#" class="btn btn-primary btn-lg">Создать заявку</a>
+                    <a href="#pool" class="btn btn-secondary btn-lg">Смотреть пул заявок</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Как это работает</h2>
+                <p class="section-subtitle">
+                    Например, сотрудник может создать заявку на реализацию функционала аутентификации
+                    для приложения — и дальше система сама проведёт её по всем этапам.
+                </p>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Создание заявки</h3>
+                        <p>
+                            Сотрудник описывает нужное изменение: что нужно реализовать, для какого
+                            сервиса и почему это важно.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Общий пул заявок</h3>
+                        <p>
+                            Заявка попадает в общий пул, где её видят все сотрудники и команды разработки,
+                            доступные для работы над задачей.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Заявку берут в работу</h3>
+                        <p>
+                            Разработчик или команда забирают заявку из пула — она закрепляется за
+                            исполнителем и меняет статус на «в работе».
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Реализация и статус</h3>
+                        <p>
+                            Автор заявки видит прогресс и статус в реальном времени — от «взято в работу»
+                            до «реализовано» и «выпущено в релиз».
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">Возможности сервиса</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Простое создание заявок</h3>
+                        <p>Понятная форма с описанием, приоритетом и сервисом, которого касается изменение.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>Общий пул заявок</h3>
+                        <p>Все открытые заявки собраны в одном месте и доступны для просмотра и взятия в работу.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>Ответственный исполнитель</h3>
+                        <p>Взятая в работу заявка закрепляется за конкретным сотрудником — видно, кто и что делает.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Статусы и история</h3>
+                        <p>Отслеживание жизненного цикла заявки: новая, в работе, на проверке, реализована.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔔</div>
+                        <h3>Уведомления</h3>
+                        <p>Автор заявки узнаёт об изменении статуса и комментариях без лишних переписок.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Поиск и фильтры</h3>
+                        <p>Быстрый поиск заявок по сервису, статусу, приоритету и исполнителю.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pool-preview" id="pool">
+            <div class="container">
+                <h2 class="section-title">Пример пула заявок</h2>
+                <div class="pool-table-wrapper">
+                    <table class="pool-table">
+                        <thead>
+                            <tr>
+                                <th>Заявка</th>
+                                <th>Сервис</th>
+                                <th>Статус</th>
+                                <th>Исполнитель</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Реализация аутентификации пользователей</td>
+                                <td>Auth Service</td>
+                                <td><span class="status status-new">Новая</span></td>
+                                <td class="muted">Не назначен</td>
+                            </tr>
+                            <tr>
+                                <td>Добавить экспорт отчётов в CSV</td>
+                                <td>Reporting</td>
+                                <td><span class="status status-progress">В работе</span></td>
+                                <td>И. Петров</td>
+                            </tr>
+                            <tr>
+                                <td>Оптимизация загрузки главной страницы</td>
+                                <td>Frontend</td>
+                                <td><span class="status status-review">На проверке</span></td>
+                                <td>А. Смирнова</td>
+                            </tr>
+                            <tr>
+                                <td>Интеграция с внешним платёжным шлюзом</td>
+                                <td>Payments</td>
+                                <td><span class="status status-done">Реализовано</span></td>
+                                <td>Д. Кузнецов</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 RFC System. Внутренний сервис компании для управления заявками на изменения.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новая заявка — RFC System</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='application_pages/new_application_page.css') }}">
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="container page-header-inner">
+            <a href="/" class="logo">RFC<span>System</span></a>
+            <a href="javascript:history.back()" class="btn btn-ghost">← Назад в кабинет</a>
+        </div>
+    </header>
+
+    <main class="form-page">
+        <div class="container">
+            <div class="form-card">
+                <h1 class="form-title">Новая заявка на изменение</h1>
+                <p class="form-subtitle">
+                    Опишите, какое изменение нужно внести в сервис — заявка попадёт в общий пул,
+                    и кто-то из команды разработки возьмёт её в работу.
+                </p>
+
+                <p class="form-error" id="new-application-error" hidden></p>
+
+                <form class="application-form" id="new-application-form" action="/application/new_application" method="post">
+                    <div class="form-group">
+                        <label for="title">Название заявки</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="Например, «Реализация аутентификации пользователей»"
+                            minlength="5"
+                            maxlength="120"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">Сервис / продукт</label>
+                        <input
+                            type="text"
+                            id="service"
+                            name="service"
+                            placeholder="Например, «Auth Service»"
+                            maxlength="60"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Приоритет</label>
+                        <div class="priority-options">
+                            <label class="priority-option">
+                                <input type="radio" name="priority" value="low">
+                                <span>Низкий</span>
+                            </label>
+                            <label class="priority-option">
+                                <input type="radio" name="priority" value="medium" checked>
+                                <span>Средний</span>
+                            </label>
+                            <label class="priority-option">
+                                <input type="radio" name="priority" value="high">
+                                <span>Высокий</span>
+                            </label>
+                            <label class="priority-option">
+                                <input type="radio" name="priority" value="critical">
+                                <span>Критический</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Описание</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="6"
+                            placeholder="Что нужно сделать, зачем это нужно и как понять, что задача выполнена?"
+                            minlength="20"
+                            maxlength="2000"
+                            required
+                        ></textarea>
+                        <span class="field-hint">
+                            <span id="description-counter">0</span> / 2000
+                        </span>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="javascript:history.back()" class="btn btn-secondary btn-lg">Отмена</a>
+                        <button type="submit" class="btn btn-primary btn-lg">Создать заявку</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const descriptionInput = document.getElementById('description');
+        const descriptionCounter = document.getElementById('description-counter');
+
+        function updateDescriptionCounter() {
+            descriptionCounter.textContent = descriptionInput.value.length;
+        }
+
+        descriptionInput.addEventListener('input', updateDescriptionCounter);
+        updateDescriptionCounter();
+
+        const newApplicationForm = document.getElementById('new-application-form');
+        const newApplicationError = document.getElementById('new-application-error');
+
+        newApplicationForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            if (!newApplicationForm.checkValidity()) {
+                newApplicationForm.reportValidity();
+                return;
+            }
+
+            newApplicationError.hidden = true;
+
+            try {
+                const response = await fetch(newApplicationForm.action, {
+                    method: 'POST',
+                    body: new FormData(newApplicationForm)
+                });
+
+                if (response.status === 201) {
+                    window.location.href = '/';
+                } else {
+                    newApplicationError.textContent = 'Не удалось создать заявку. Проверьте данные и попробуйте ещё раз.';
+                    newApplicationError.hidden = false;
+                }
+            } catch (error) {
+                newApplicationError.textContent = 'Не удалось связаться с сервером. Попробуйте позже.';
+                newApplicationError.hidden = false;
+            }
+        });
+    </script>
+
+</body>
+</html>

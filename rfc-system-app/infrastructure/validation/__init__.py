@@ -1,0 +1,2 @@
+from .reg_data_validator import UserRegValidator
+from .login_data_validator import UserLoginValidator

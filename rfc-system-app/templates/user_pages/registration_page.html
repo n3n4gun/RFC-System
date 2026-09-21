@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — RFC System</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='user_pages/registration_page.css') }}">
+</head>
+<body>
+
+    <div class="auth-page">
+        <div class="auth-card">
+            <a href="/" class="auth-logo">RFC<span>System</span></a>
+
+            <div id="registration-success" class="success-message" hidden>
+                <div class="success-icon">&#10003;</div>
+                <h2 class="success-title">Регистрация прошла успешно!</h2>
+                <p class="success-text">Аккаунт создан. Теперь вы можете войти в систему и создать первую заявку.</p>
+                <a href="/user/login" class="btn btn-primary btn-block">Войти в аккаунт</a>
+            </div>
+
+            <div id="registration-form-wrapper">
+                <p class="auth-subtitle">Создайте аккаунт, чтобы оформлять и отслеживать заявки на изменения.</p>
+
+                <p class="form-error" id="registration-error" hidden></p>
+
+                <form class="auth-form" id="registration-form" action="/user/registration" method="post">
+                    <div class="form-group">
+                        <label for="full_name">Имя и фамилия</label>
+                        <input type="text" id="full_name" name="full_name" placeholder="Иван Иванов" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Рабочая почта</label>
+                        <input type="email" id="email" name="email" placeholder="name@company.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="department">Отдел</label>
+                        <input type="text" id="department" name="department" placeholder="Например, Разработка">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" id="password" name="password" placeholder="Придумайте пароль" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirm">Подтверждение пароля</label>
+                        <input type="password" id="password_confirm" name="password_confirm" placeholder="Повторите пароль" required>
+                        <span class="field-error" id="password_confirm_error"></span>
+                    </div>
+
+                    <label class="checkbox">
+                        <input type="checkbox" name="agreement" required>
+                        <span>Я принимаю условия использования сервиса</span>
+                    </label>
+
+                    <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+                </form>
+
+                <p class="auth-footer-text">
+                    Уже есть аккаунт?
+                    <a href="/user/enter" class="auth-link">Войти</a>
+                </p>
+
+                <p class="auth-footer-text">
+                    <a href="/" class="auth-link">На главную</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmInput = document.getElementById('password_confirm');
+        const passwordConfirmError = document.getElementById('password_confirm_error');
+
+        function checkPasswordsMatch() {
+            const mismatch = passwordConfirmInput.value !== passwordInput.value;
+
+            passwordConfirmInput.setCustomValidity(mismatch ? 'Пароли не совпадают' : '');
+            passwordConfirmError.textContent = mismatch && passwordConfirmInput.value ? 'Пароли не совпадают' : '';
+            passwordConfirmInput.classList.toggle('input-error', mismatch && passwordConfirmInput.value.length > 0);
+        }
+
+        passwordInput.addEventListener('input', checkPasswordsMatch);
+        passwordConfirmInput.addEventListener('input', checkPasswordsMatch);
+
+        const emailInput = document.getElementById('email');
+        const registrationForm = document.getElementById('registration-form');
+        const registrationFormWrapper = document.getElementById('registration-form-wrapper');
+        const registrationSuccess = document.getElementById('registration-success');
+        const registrationError = document.getElementById('registration-error');
+
+        emailInput.addEventListener('input', function () {
+            emailInput.classList.remove('input-error');
+            registrationError.hidden = true;
+        });
+
+        registrationForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            if (!registrationForm.checkValidity()) {
+                registrationForm.reportValidity();
+                return;
+            }
+
+            registrationError.hidden = true;
+
+            try {
+                const response = await fetch(registrationForm.action, {
+                    method: 'POST',
+                    body: new FormData(registrationForm)
+                });
+
+                if (response.status === 201) {
+                    registrationFormWrapper.hidden = true;
+                    registrationSuccess.hidden = false;
+                } else if (response.status === 409) {
+                    emailInput.classList.add('input-error');
+                    registrationError.textContent = 'Пользователь с такой почтой уже зарегистрирован.';
+                    registrationError.hidden = false;
+                } else {
+                    registrationError.textContent = 'Не удалось выполнить регистрацию. Проверьте данные и попробуйте ещё раз.';
+                    registrationError.hidden = false;
+                }
+            } catch (error) {
+                registrationError.textContent = 'Не удалось связаться с сервером. Попробуйте позже.';
+                registrationError.hidden = false;
+            }
+        });
+    </script>
+
+</body>
+</html>

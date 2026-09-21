@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет — RFC System</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='user_pages/user_page.css') }}">
+</head>
+<body>
+
+    <header class="dashboard-header">
+        <div class="container dashboard-header-inner">
+            <a href="/" class="logo">RFC<span>System</span></a>
+            <div class="dashboard-user">
+                {% if current_user %}
+                <span class="dashboard-user-email">{{ current_user.email }}</span>
+                {% endif %}
+                <a href="/user/logout" class="btn btn-ghost">Выйти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+
+            <section class="profile-card">
+                <div class="profile-avatar">
+                    {% if current_user and current_user.email %}{{ current_user.email[0] | upper }}{% else %}U{% endif %}
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name">
+                        {% if current_user and current_user.full_name %}{{ current_user.full_name }}{% else %}Сотрудник{% endif %}
+                    </h1>
+                    {% if current_user %}
+                    <p class="profile-email">{{ current_user.email }}</p>
+                    <p class="profile-id">ID: <code>{{ current_user.user_id }}</code></p>
+                    {% endif %}
+                    <span class="profile-status
+                        {%- if current_user and current_user.is_active %} profile-status-active{% else %} profile-status-inactive{%- endif %}">
+                        {% if current_user and current_user.is_active %}Активен{% else %}Неактивен{% endif %}
+                    </span>
+                </div>
+            </section>
+
+            <div class="dashboard-actions">
+                <a href="/application/new" class="btn btn-primary btn-lg">Создать заявку</a>
+                <a href="/applications" class="btn btn-secondary btn-lg">Общий пул заявок</a>
+            </div>
+
+            <section class="dashboard-section">
+                <div class="section-head">
+                    <h2 class="section-title">Мои заявки</h2>
+                    <span class="section-count">{{ my_requests | length if my_requests else 0 }}</span>
+                </div>
+
+                {% if my_requests %}
+                <div class="request-list">
+                    {% for request_item in my_requests %}
+                    <article class="request-card">
+                        <div class="request-main">
+                            <h3 class="request-title">{{ request_item.title }}</h3>
+                            <p class="request-meta">
+                                {% if request_item.service %}<span>{{ request_item.service }}</span>{% endif %}
+                                {% if request_item.created_at %}<span>{{ request_item.created_at }}</span>{% endif %}
+                            </p>
+                        </div>
+                        <div class="request-side">
+                            <span class="status status-{{ request_item.status_code | default('new') }}">
+                                {{ request_item.status_label | default('Новая') }}
+                            </span>
+                            <span class="request-assignee">
+                                {% if request_item.assignee %}Исполнитель: {{ request_item.assignee }}{% else %}Не назначен{% endif %}
+                            </span>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <p>У вас пока нет созданных заявок.</p>
+                    <a href="/application/new" class="btn btn-primary">Создать первую заявку</a>
+                </div>
+                {% endif %}
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-head">
+                    <h2 class="section-title">Заявки в работе у меня</h2>
+                    <span class="section-count">{{ assigned_requests | length if assigned_requests else 0 }}</span>
+                </div>
+
+                {% if assigned_requests %}
+                <div class="request-list">
+                    {% for request_item in assigned_requests %}
+                    <article class="request-card">
+                        <div class="request-main">
+                            <h3 class="request-title">{{ request_item.title }}</h3>
+                            <p class="request-meta">
+                                {% if request_item.service %}<span>{{ request_item.service }}</span>{% endif %}
+                                {% if request_item.author %}<span>Автор: {{ request_item.author }}</span>{% endif %}
+                            </p>
+                        </div>
+                        <div class="request-side">
+                            <span class="status status-{{ request_item.status_code | default('progress') }}">
+                                {{ request_item.status_label | default('В работе') }}
+                            </span>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <p>Вы пока не взяли ни одной заявки в работу.</p>
+                    <a href="/applications" class="btn btn-secondary">Посмотреть общий пул</a>
+                </div>
+                {% endif %}
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

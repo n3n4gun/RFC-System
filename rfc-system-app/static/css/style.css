@@ -1,0 +1,356 @@
+:root {
+    --color-bg: #f7f8fb;
+    --color-surface: #ffffff;
+    --color-border: #e3e6ec;
+    --color-text: #1b1f27;
+    --color-text-muted: #6b7280;
+    --color-primary: #4f46e5;
+    --color-primary-dark: #4338ca;
+    --color-accent: #6366f1;
+    --radius: 10px;
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+    --shadow-md: 0 4px 16px rgba(16, 24, 40, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Header */
+.site-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.logo span {
+    color: var(--color-primary);
+}
+
+.main-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.main-nav a {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.main-nav a:hover {
+    color: var(--color-primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+    background-color: #eef0ff;
+}
+
+.btn-ghost {
+    background-color: transparent;
+    color: var(--color-text-muted);
+}
+
+.btn-ghost:hover {
+    color: var(--color-text);
+}
+
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 1rem;
+}
+
+/* Hero */
+.hero {
+    background: linear-gradient(180deg, #eef0ff 0%, var(--color-bg) 100%);
+    padding: 96px 0 80px;
+}
+
+.hero-inner {
+    text-align: center;
+    max-width: 760px;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin: 0 0 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin: 0 auto 36px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Sections */
+section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 0 12px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    max-width: 640px;
+    margin: 0 auto 48px;
+}
+
+/* How it works */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.step {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 28px 22px;
+    box-shadow: var(--shadow-sm);
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.step h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+}
+
+.step p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+/* Features */
+.features {
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.feature-card {
+    padding: 24px;
+    border-radius: var(--radius);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+}
+
+.feature-icon {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+}
+
+.feature-card p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+/* Pool preview */
+.pool-table-wrapper {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    box-shadow: var(--shadow-md);
+}
+
+.pool-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+}
+
+.pool-table th,
+.pool-table td {
+    text-align: left;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.95rem;
+}
+
+.pool-table th {
+    color: var(--color-text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background-color: var(--color-bg);
+}
+
+.pool-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.muted {
+    color: var(--color-text-muted);
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.status-new {
+    background-color: #e0e7ff;
+    color: #4338ca;
+}
+
+.status-progress {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-review {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-done {
+    background-color: #d1fae5;
+    color: #047857;
+}
+
+/* Footer */
+.site-footer {
+    padding: 32px 0;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .main-nav {
+        display: none;
+    }
+
+    .steps,
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+}
