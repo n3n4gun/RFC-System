@@ -1,2 +1,3 @@
 from .connection_port import ConnectionPort
-from .user_db_port import UserDataBasePort
+from .user_table_port import UserTableBasePort
+from .application_table_port import ApplicationTablePort

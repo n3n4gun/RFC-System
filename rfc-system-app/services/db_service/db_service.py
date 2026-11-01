@@ -2,10 +2,10 @@ from typing import Tuple
 from loguru import logger
 
 from core import RegistrationOutcome, AuthentificationOutcome
-from infrastructure import Connection, UserDataBase
+from infrastructure import Connection, UserTable
 
 connection = Connection()
-user_data_base = UserDataBase()
+user_table = UserTable()
 
 class DataBaseService:
     def registrate_new_user(self, user_reg_data: dict) -> RegistrationOutcome:
@@ -13,7 +13,7 @@ class DataBaseService:
 
         if self._db_connection and self._db_cursor:
             try:
-                transaction_status_outcome = user_data_base.insert_new_user(self._db_cursor, user_reg_data)
+                transaction_status_outcome = user_table.insert_new_user(self._db_cursor, user_reg_data)
 
                 if transaction_status_outcome == RegistrationOutcome.REGISTRATION_SUCCESS:
                     self._db_connection.commit()
@@ -39,7 +39,7 @@ class DataBaseService:
 
         if self._db_connection and self._db_cursor:
             try:
-                transaction_status_outcome, user_id = user_data_base.get_user(self._db_cursor, user_login_data)
+                transaction_status_outcome, user_id = user_table.get_user(self._db_cursor, user_login_data)
 
                 if transaction_status_outcome == AuthentificationOutcome.LOGIN_SUCCESS:
                     return AuthentificationOutcome.LOGIN_SUCCESS, user_id
@@ -63,7 +63,7 @@ class DataBaseService:
 
         if self._db_connection and self._db_cursor:
             try:
-                is_active = user_data_base.check_user_is_active(self._db_cursor, user_id)
+                is_active = user_table.check_user_is_active(self._db_cursor, user_id)
 
                 if not is_active:
                     return None

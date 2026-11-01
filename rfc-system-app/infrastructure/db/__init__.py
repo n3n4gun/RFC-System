@@ -1,2 +1,2 @@
 from .connection import Connection
-from .user_db import UserDataBase
+from .user_table import UserTable

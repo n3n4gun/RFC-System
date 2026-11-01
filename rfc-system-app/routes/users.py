@@ -200,6 +200,13 @@ async def get_user_page(
 
 @router.post('/logout')
 async def user_logout(
-    request: Request
+    response: Response
 ):
-    pass
+    response.delete_cookie(
+        key = 'access_token',
+        path = '/',
+        httponly = True,
+        samesite = 'lax'
+    )
+
+    return {'message': 'logout'}

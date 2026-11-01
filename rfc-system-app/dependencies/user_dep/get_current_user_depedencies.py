@@ -5,7 +5,7 @@ from fastapi import Request, Depends, HTTPException, status
 from services import DataBaseService
 from core import decode_access_token
 from models import ActiveUserModel, User
-from dependencies import get_db_service
+from ..db_dep import get_db_service
 
 def get_current_user(request: Request) -> User:
     token = request.cookies.get('access_token')

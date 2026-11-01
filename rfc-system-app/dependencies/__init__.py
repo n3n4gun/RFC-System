@@ -1,4 +1,2 @@
-from .db_dependencies import get_db_service
-from .user_login_validator_dependencies import get_user_login_validator
-from .user_reg_validator_dependencies import get_user_reg_validator
-from .get_current_user_depedencies import get_current_user, get_current_active_user
+from .db_dep import get_db_service
+from .user_dep import get_user_login_validator, get_user_reg_validator, get_current_user, get_current_active_user

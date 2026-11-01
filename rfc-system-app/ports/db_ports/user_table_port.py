@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class UserDataBasePort(ABC):
+class UserTableBasePort(ABC):
     @abstractmethod
     def insert_new_user(self):
         raise NotImplementedError

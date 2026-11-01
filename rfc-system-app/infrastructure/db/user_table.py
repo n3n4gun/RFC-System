@@ -7,10 +7,10 @@ from datetime import datetime
 from loguru import logger
 from passlib.context import CryptContext
 
-from ports import UserDataBasePort
+from ports import UserTableBasePort
 from core import RegistrationOutcome, AuthentificationOutcome, get_password_hash, verify_password
 
-class UserDataBase(UserDataBasePort):
+class UserTable(UserTableBasePort):
     def insert_new_user(self, _db_cursor, user_reg_data: dict) -> RegistrationOutcome:
         new_user_id = str(uuid.uuid4().hex)
         user_reg_data = {'user_id' : new_user_id} | user_reg_data

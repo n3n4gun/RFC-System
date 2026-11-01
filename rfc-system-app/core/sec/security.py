@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
 
-from .config import jwt_settings
+from ..conf import jwt_settings
 
 pwd_context = CryptContext(
     schemes = os.environ.get('SCHEMES'),
