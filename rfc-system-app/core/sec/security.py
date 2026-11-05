@@ -1,7 +1,7 @@
 import os
-
-from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
+
+from jose import jwt, JWTError
 from passlib.context import CryptContext
 
 from ..conf import jwt_settings

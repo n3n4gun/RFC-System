@@ -1,7 +1,8 @@
+from loguru import logger
 from pydantic import ValidationError
 
-from ports import UserRegValidatorPort
 from models import RegisterUserModel
+from ports import UserRegValidatorPort
 
 class UserRegValidator(UserRegValidatorPort):
     def validate_user_reg_data(self, user_reg_data: dict) -> bool:
@@ -10,4 +11,5 @@ class UserRegValidator(UserRegValidatorPort):
             return True
 
         except ValidationError as validate_user_reg_data_error:
+            logger.warning('Registration data validation failed')
             return False

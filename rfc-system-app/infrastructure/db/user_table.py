@@ -1,21 +1,27 @@
-import os
 import uuid
-import psycopg2
-
-from typing import Tuple
 from datetime import datetime
+from typing import Tuple
+
+import psycopg2
 from loguru import logger
 from passlib.context import CryptContext
 
+from core import (
+    AuthentificationOutcome,
+    get_password_hash,
+    RegistrationOutcome,
+    verify_password,
+)
 from ports import UserTableBasePort
-from core import RegistrationOutcome, AuthentificationOutcome, get_password_hash, verify_password
 
 class UserTable(UserTableBasePort):
     def insert_new_user(self, _db_cursor, user_reg_data: dict) -> RegistrationOutcome:
         new_user_id = str(uuid.uuid4().hex)
         user_reg_data = {'user_id' : new_user_id} | user_reg_data
         user_reg_data['password'] = get_password_hash(user_reg_data['password'])
-        user_reg_data.update({'registration_date': datetime.now().isoformat()})
+        user_reg_data.update(
+            {'registration_date': datetime.now().isoformat()}
+        )
 
         try:
             users_table_columns = self.__get_users_table_columns()
@@ -36,17 +42,17 @@ class UserTable(UserTableBasePort):
             _db_cursor.execute(users_table_db_query, users_table_query_parameters)
             _db_cursor.execute(active_users_db_query, active_users_query_parameters)
 
-            logger.success('DB SUCCESS: user has inserted successfully')
+            logger.debug('User insert executed; awaiting transaction commit')
 
             return RegistrationOutcome.REGISTRATION_SUCCESS
 
         except psycopg2.errors.UniqueViolation:
-            logger.error(f"DB ERROR: user {user_reg_data['email']} has already existed")
+            logger.warning('Registration rejected: duplicate email')
 
             return RegistrationOutcome.REGISTRATION_EMAIL_TAKEN
         
         except psycopg2.Error as insert_new_user_error:
-            logger.error(f'DB ERROR: {insert_new_user_error}')
+            logger.error('User insert failed sqlstate={}', insert_new_user_error.pgcode)
 
             return RegistrationOutcome.REGISTRATION_DB_ERROR
 
@@ -67,23 +73,24 @@ class UserTable(UserTableBasePort):
 
             if user_row:
                 if verify_password(user_password, user_row[1]):
-                    logger.success(f"DB SUCCESS: user {user_email} has successfully authentificated")
+                    logger.info('User credentials verified')
 
                     return AuthentificationOutcome.LOGIN_SUCCESS, user_row[0]
 
-                logger.error('DB ERROR: unsuccessful password hash verification')
+                logger.warning('Authentication rejected: invalid credentials')
 
                 return AuthentificationOutcome.LOGIN_AUTH_ERROR, None
 
+            logger.warning('Authentication rejected: invalid credentials')
             return AuthentificationOutcome.LOGIN_AUTH_ERROR, None
 
         except psycopg2.Error as get_user_error:
-            logger.error(f"DB ERROR: {get_user_error}")
+            logger.error('User lookup failed sqlstate={}', get_user_error.pgcode)
 
             return AuthentificationOutcome.LOGIN_DB_ERROR, None
 
         except Exception as unexpected_db_error:
-            logger.error(f"EXCEPTION: {unexpected_db_error}")
+            logger.error('User lookup failed error_type={}', type(unexpected_db_error).__name__)
 
             return AuthentificationOutcome.LOGIN_DB_ERROR, None
 
@@ -101,13 +108,13 @@ class UserTable(UserTableBasePort):
             row = _db_cursor.fetchone()
 
             if row is None:
-                logger.error(f'DB ERROR: no active_users record for user_id {user_id}')
+                logger.warning('User activity record not found')
                 return None
 
             return row[0]    # true || false
 
         except psycopg2.Error as check_user_is_active_error:
-            logger.error(f'DB ERROR: {check_user_is_active_error}')
+            logger.error('User activity lookup failed sqlstate={}', check_user_is_active_error.pgcode)
 
     def __get_users_table_columns(self) -> list:
         __columns = [

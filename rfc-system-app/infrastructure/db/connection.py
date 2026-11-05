@@ -1,6 +1,6 @@
 import os
-import psycopg2
 
+import psycopg2
 from loguru import logger
 from psycopg2 import errors
 
@@ -18,11 +18,11 @@ class Connection(ConnectionPort):
             )
             db_cursor = db_connection.cursor()
 
-            logger.success('DB SUCCESS: db connection has established')
+            logger.debug('Database connection opened')
             return db_connection, db_cursor
 
         except psycopg2.Error as db_connect_error:
-            logger.error(f'DB ERROR: {db_connect_error}')
+            logger.error('Database connection failed error_type={}', type(db_connect_error).__name__)
             return None, None
 
     def db_disconnect(self, db_connection, db_cursor):
@@ -31,4 +31,4 @@ class Connection(ConnectionPort):
             db_connection.close()
 
         except psycopg2.Error as db_disconnect_error:
-            logger.error(f'DB ERROR: {db_disconnect_error}')
+            logger.error('Database disconnect failed error_type={}', type(db_disconnect_error).__name__)

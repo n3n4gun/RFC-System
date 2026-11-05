@@ -1,3 +1,4 @@
+from loguru import logger
 from pydantic import ValidationError
 
 from models import LoginUserModel
@@ -10,4 +11,5 @@ class UserLoginValidator(UserLoginValidatorPort):
             return True
 
         except ValidationError as validate_user_login_data_error:
+            logger.warning('Login data validation failed')
             return False

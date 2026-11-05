@@ -1,16 +1,19 @@
 from typing import Annotated
-from loguru import logger
-from fastapi import Request, Depends, HTTPException, status
 
-from services import DataBaseService
+from fastapi import Depends, HTTPException, Request, status
+from loguru import logger
+
 from core import decode_access_token
 from models import ActiveUserModel, User
+from services import DataBaseService
+
 from ..db_dep import get_db_service
 
 def get_current_user(request: Request) -> User:
     token = request.cookies.get('access_token')
 
     if not token:
+        logger.debug('Authentication cookie missing')
         raise HTTPException(
             status_code = status.HTTP_303_SEE_OTHER,
             detail = 'Unauthorized user',
@@ -20,7 +23,7 @@ def get_current_user(request: Request) -> User:
     user_payload = decode_access_token(token)
 
     if user_payload is None:
-        logger.error(f'AUTHORIZED ERROR: Invalid or expired token: {user_payload}')
+        logger.warning('Authentication rejected: invalid or expired token')
         raise HTTPException(
             status_code = status.HTTP_303_SEE_OTHER,
             detail = 'Invalid or expired token',
@@ -39,6 +42,7 @@ def get_current_active_user(
     is_active = db_service.check_user_is_active(current_user.user_id)
 
     if is_active is None:
+        logger.warning('Unable to verify user activity')
         raise HTTPException(
             status_code = status.HTTP_303_SEE_OTHER,
             detail = 'Unable to verify user status',
@@ -46,6 +50,7 @@ def get_current_active_user(
         )
 
     if not is_active:
+        logger.warning('Access rejected: inactive user')
         raise HTTPException(
             status_code = status.HTTP_303_SEE_OTHER,
             detail = 'User is not active',

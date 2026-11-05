@@ -1,2 +1,6 @@
-from .validation import UserRegValidator, UserLoginValidator
-from .db import Connection, UserTable
+from .db import ApplicationTable, Connection, UserTable
+from .validation import (
+    NewApplicationValidator,
+    UserLoginValidator,
+    UserRegValidator,
+)

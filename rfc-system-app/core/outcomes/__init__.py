@@ -1,1 +1,5 @@
-from .outcomes import RegistrationOutcome, AuthentificationOutcome
+from .outcomes import (
+    ApplicationOutcome,
+    AuthentificationOutcome,
+    RegistrationOutcome,
+)

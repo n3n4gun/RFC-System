@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import auto, Enum
 
 class RegistrationOutcome(Enum):
     REGISTRATION_SUCCESS = auto()
@@ -11,3 +11,9 @@ class AuthentificationOutcome(Enum):
     LOGIN_AUTH_ERROR = auto()
     LOGIN_DB_ERROR = auto()
     LOGIN_DB_UNAVAILABLE = auto()
+    LOGIN_USER_INACTIVE = auto()
+
+class ApplicationOutcome(Enum):
+    APPLICATION_SUCCESS = auto()
+    APPLICATION_DB_ERROR = auto()
+    APPLICATION_DB_UNAVAILABLE = auto()

@@ -1,38 +1,34 @@
 from typing import Annotated
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+
 from fastapi import (
     APIRouter,
-    Request,
-    Response,
-    HTTPException,
     Cookie,
     Depends,
     Form,
-    status
+    HTTPException,
+    Request,
+    Response,
+    status,
 )
-from fastapi.responses import (
-    JSONResponse,
-    RedirectResponse
-)
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from loguru import logger
 
-from services import DataBaseService
-from models import JWTTokenModel, ActiveUserModel
-from infrastructure import (
-    UserRegValidator,
-    UserLoginValidator
-)
 from core import (
-    RegistrationOutcome, 
-    AuthentificationOutcome, 
-    create_access_token
+    AuthentificationOutcome,
+    create_access_token,
+    RegistrationOutcome,
 )
 from dependencies import (
+    get_current_active_user,
     get_db_service,
-    get_user_reg_validator,
     get_user_login_validator,
-    get_current_active_user
+    get_user_reg_validator,
 )
+from infrastructure import UserLoginValidator, UserRegValidator
+from models import ActiveUserModel, JWTTokenModel
+from services import DataBaseService
 
 router = APIRouter(prefix = '/user')
 templates = Jinja2Templates(directory = 'templates/user_pages')
@@ -111,6 +107,12 @@ async def login_user(
                 content = {'status': 'unauthorized', 'message': 'user is unauthorized'}
             )
 
+        case AuthentificationOutcome.LOGIN_USER_INACTIVE:
+            return JSONResponse(
+                status_code = status.HTTP_403_FORBIDDEN,
+                content = {'status': 'forbidden', 'message': 'User is inactive'}
+            )
+
         case _:
             return JSONResponse(
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -126,7 +128,6 @@ async def show_registration_page(request: Request):
 
 @router.post('/registration')
 async def register_user(
-    request: Request,
     full_name: Annotated[str, Form()],
     email: Annotated[str, Form()],
     department: Annotated[str, Form()],
@@ -186,6 +187,7 @@ async def get_user_page(
     current_user: Annotated[ActiveUserModel, Depends(get_current_active_user)]
 ):
     if current_user.user_id != user_id:
+        logger.warning('Access rejected: user page belongs to another user')
         raise HTTPException(
             status_code = status.HTTP_303_SEE_OTHER,
             detail = 'Forbidden',
@@ -209,4 +211,5 @@ async def user_logout(
         samesite = 'lax'
     )
 
+    logger.info('Logout completed: authentication cookie cleared')
     return {'message': 'logout'}

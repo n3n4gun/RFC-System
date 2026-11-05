@@ -1,3 +1,6 @@
+from .get_current_user_depedencies import (
+    get_current_active_user,
+    get_current_user,
+)
 from .user_login_validator_dependencies import get_user_login_validator
 from .user_reg_validator_dependencies import get_user_reg_validator
-from .get_current_user_depedencies import get_current_user, get_current_active_user

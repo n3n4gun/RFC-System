@@ -1,2 +1,6 @@
-from .validation_ports import UserLoginValidatorPort, UserRegValidatorPort
-from .db_ports import ConnectionPort, UserTableBasePort, ApplicationTablePort
+from .db_ports import ApplicationTablePort, ConnectionPort, UserTableBasePort
+from .validation_ports import (
+    NewApplicationValidatorPort,
+    UserLoginValidatorPort,
+    UserRegValidatorPort,
+)

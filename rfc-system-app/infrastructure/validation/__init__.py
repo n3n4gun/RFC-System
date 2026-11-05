@@ -1,2 +1,3 @@
-from .reg_data_validator import UserRegValidator
 from .login_data_validator import UserLoginValidator
+from .new_application_validator import NewApplicationValidator
+from .reg_data_validator import UserRegValidator

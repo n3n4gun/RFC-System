@@ -1,1 +1,2 @@
-from .validator_port import UserRegValidatorPort, UserLoginValidatorPort
+from .new_application_validator_port import NewApplicationValidatorPort
+from .validator_port import UserLoginValidatorPort, UserRegValidatorPort

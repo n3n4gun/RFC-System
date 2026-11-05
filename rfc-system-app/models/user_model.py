@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, SecretStr, Field
+from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 class User(BaseModel):
     user_id: str
